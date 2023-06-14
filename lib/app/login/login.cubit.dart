@@ -11,7 +11,6 @@ part 'login.state.dart';
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit(this._authenticationService) : super(const LoginInitial());
 
-
   final AuthenticationService _authenticationService;
 
   var rememberPassword = Application.sharePreference.hasKey('credentialData');

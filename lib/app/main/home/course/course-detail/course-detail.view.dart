@@ -36,9 +36,11 @@ class _CourseDetailViewState extends State<CourseDetailView> {
       appBar: staticAppbar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_outlined),
-          onPressed: () => Modular.to.navigate(AppModule.main + NavBarModule.course),
+          onPressed: () =>
+              Modular.to.navigate(AppModule.main + NavBarModule.course),
         ),
-        title: Text(widget.course.courseName!, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15.sp)),
+        title: Text(widget.course.courseName!,
+            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15.sp)),
         backgroundColor: const Color(0xff07527B),
       ),
       body: Container(
@@ -93,26 +95,41 @@ class _CourseDetailViewState extends State<CourseDetailView> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 GestureDetector(
-                  onTap: () => setState(() => _cubit.type = CourseDetailTab.courseInfo),
+                  onTap: () =>
+                      setState(() => _cubit.type = CourseDetailTab.courseInfo),
                   child: Text(
                     'Thông tin',
-                    style: TextStyle(color: (_cubit.type == CourseDetailTab.courseInfo) ? Colors.white : Colors.black87, fontSize: 12.sp),
+                    style: TextStyle(
+                        color: (_cubit.type == CourseDetailTab.courseInfo)
+                            ? Colors.white
+                            : Colors.black87,
+                        fontSize: 12.sp),
                   ),
                 ),
                 SizedBox(width: 1.w),
                 GestureDetector(
-                  onTap: () => setState(() => _cubit.type = CourseDetailTab.coursePlan),
+                  onTap: () =>
+                      setState(() => _cubit.type = CourseDetailTab.coursePlan),
                   child: Text(
                     'Lộ trình',
-                    style: TextStyle(color: (_cubit.type == CourseDetailTab.coursePlan) ? Colors.white : Colors.black87, fontSize: 12.sp),
+                    style: TextStyle(
+                        color: (_cubit.type == CourseDetailTab.coursePlan)
+                            ? Colors.white
+                            : Colors.black87,
+                        fontSize: 12.sp),
                   ),
                 ),
                 SizedBox(width: 1.w),
                 GestureDetector(
-                  onTap: () => setState(() => _cubit.type = CourseDetailTab.classInfo),
+                  onTap: () =>
+                      setState(() => _cubit.type = CourseDetailTab.classInfo),
                   child: Text(
                     'Lớp học',
-                    style: TextStyle(color: (_cubit.type == CourseDetailTab.classInfo) ? Colors.white : Colors.black87, fontSize: 12.sp),
+                    style: TextStyle(
+                        color: (_cubit.type == CourseDetailTab.classInfo)
+                            ? Colors.white
+                            : Colors.black87,
+                        fontSize: 12.sp),
                   ),
                 ),
               ],
@@ -137,14 +154,23 @@ class _CourseDetailViewState extends State<CourseDetailView> {
   }
 
   Widget buildCourseInfo() {
-    return Text(widget.course.description ?? 'Chưa xác định');
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(widget.course.description ?? "Chưa có dữ liệu"),
+        SizedBox(height: 1.h),
+        ElevatedButton(onPressed: () => {}, child: Text('Đăng ký học')),
+      ],
+    );
   }
 
   Widget buildCoursePlan() {
     return BlocBuilder(
       bloc: _cubit,
-      buildWhen: (pre, now) => now is CoursePlanLoading || now is CoursePlanLoaded,
-      builder: (context, state) => state is CoursePlanLoaded && _cubit.coursePlan.id != null
+      buildWhen: (pre, now) =>
+          now is CoursePlanLoading || now is CoursePlanLoaded,
+      builder: (context, state) => state is CoursePlanLoaded &&
+              _cubit.coursePlan.id != null
           ? SingleChildScrollView(
               child: Column(
                 children: List.generate(
@@ -167,22 +193,26 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                                     SizedBox(height: 1.h),
                                     Text(
                                       'Buổi: ${_cubit.coursePlan.coursePlanDetails?.elementAt(index).lesson}',
-                                      style: const TextStyle(color: Colors.black),
+                                      style:
+                                          const TextStyle(color: Colors.black),
                                     ),
                                     SizedBox(height: 0.5.h),
                                     Text(
                                       'Chủ đề: ${_cubit.coursePlan.coursePlanDetails?.elementAt(index).topic}',
-                                      style: const TextStyle(color: Colors.black),
+                                      style:
+                                          const TextStyle(color: Colors.black),
                                     ),
                                     SizedBox(height: 0.5.h),
                                     Text(
                                       'Nội dung trên lớp: ${_cubit.coursePlan.coursePlanDetails?.elementAt(index).content}',
-                                      style: const TextStyle(color: Colors.black),
+                                      style:
+                                          const TextStyle(color: Colors.black),
                                     ),
                                     SizedBox(height: 0.5.h),
                                     Text(
                                       'Bài tập về nhà: ${_cubit.coursePlan.coursePlanDetails?.elementAt(index).homework}',
-                                      style: const TextStyle(color: Colors.black),
+                                      style:
+                                          const TextStyle(color: Colors.black),
                                     ),
                                     SizedBox(height: 1.h),
                                   ],
@@ -226,7 +256,8 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                             flex: 4,
                             child: Padding(
                               padding: EdgeInsets.symmetric(vertical: 1.h),
-                              child: Text(_cubit.classInfoTitles.elementAt(0), overflow: TextOverflow.ellipsis, maxLines: 1),
+                              child: Text(_cubit.classInfoTitles.elementAt(0),
+                                  overflow: TextOverflow.ellipsis, maxLines: 1),
                             ),
                           ),
                           Expanded(
@@ -237,11 +268,25 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                                 animation: true,
                                 lineHeight: 20,
                                 animationDuration: 250,
-                                percent: widget.course.classes!.elementAt(index).lessons!.isEmpty
+                                percent: widget.course.classes!
+                                        .elementAt(index)
+                                        .lessons!
+                                        .isEmpty
                                     ? 0
-                                    : ((widget.course.classes!.elementAt(index).lessons!.where((element) => element.isAttendance == true).length) /
-                                        (widget.course.classes!.elementAt(index).lessons!.length)),
-                                center: Text(widget.course.classes!.elementAt(index).lessons!.isEmpty
+                                    : ((widget.course.classes!
+                                            .elementAt(index)
+                                            .lessons!
+                                            .where((element) =>
+                                                element.isAttendance == true)
+                                            .length) /
+                                        (widget.course.classes!
+                                            .elementAt(index)
+                                            .lessons!
+                                            .length)),
+                                center: Text(widget.course.classes!
+                                        .elementAt(index)
+                                        .lessons!
+                                        .isEmpty
                                     ? '0/0'
                                     : '${widget.course.classes!.elementAt(index).lessons!.where((element) => element.isAttendance == true).length}/${widget.course.classes!.elementAt(index).lessons!.length}'),
                                 barRadius: const Radius.circular(10),
@@ -257,15 +302,22 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                             flex: 4,
                             child: Padding(
                               padding: EdgeInsets.symmetric(vertical: 1.h),
-                              child: Text(_cubit.classInfoTitles.elementAt(1), overflow: TextOverflow.ellipsis, maxLines: 1),
+                              child: Text(_cubit.classInfoTitles.elementAt(1),
+                                  overflow: TextOverflow.ellipsis, maxLines: 1),
                             ),
                           ),
                           Expanded(
                             flex: 7,
                             child: Padding(
                               padding: EdgeInsets.symmetric(vertical: 1.h),
-                              child: Text(widget.course.classes?.elementAt(index).startDate != null
-                                  ? DateFormat.yMd().format(widget.course.classes!.elementAt(index).startDate!)
+                              child: Text(widget.course.classes
+                                          ?.elementAt(index)
+                                          .startDate !=
+                                      null
+                                  ? DateFormat.yMd().format(widget
+                                      .course.classes!
+                                      .elementAt(index)
+                                      .startDate!)
                                   : 'Chưa xác định'),
                             ),
                           ),
@@ -277,15 +329,22 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                             flex: 4,
                             child: Padding(
                               padding: EdgeInsets.symmetric(vertical: 1.h),
-                              child: Text(_cubit.classInfoTitles.elementAt(2), overflow: TextOverflow.ellipsis, maxLines: 1),
+                              child: Text(_cubit.classInfoTitles.elementAt(2),
+                                  overflow: TextOverflow.ellipsis, maxLines: 1),
                             ),
                           ),
                           Expanded(
                             flex: 7,
                             child: Padding(
                               padding: EdgeInsets.symmetric(vertical: 1.h),
-                              child: Text(widget.course.classes?.elementAt(index).endDate != null
-                                  ? DateFormat.yMd().format(widget.course.classes!.elementAt(index).endDate!)
+                              child: Text(widget.course.classes
+                                          ?.elementAt(index)
+                                          .endDate !=
+                                      null
+                                  ? DateFormat.yMd().format(widget
+                                      .course.classes!
+                                      .elementAt(index)
+                                      .endDate!)
                                   : 'Chưa xác định'),
                             ),
                           ),
@@ -297,7 +356,8 @@ class _CourseDetailViewState extends State<CourseDetailView> {
                             flex: 4,
                             child: Padding(
                               padding: EdgeInsets.symmetric(vertical: 1.h),
-                              child: Text(_cubit.classInfoTitles.elementAt(3), overflow: TextOverflow.ellipsis, maxLines: 2),
+                              child: Text(_cubit.classInfoTitles.elementAt(3),
+                                  overflow: TextOverflow.ellipsis, maxLines: 2),
                             ),
                           ),
                           Expanded(
